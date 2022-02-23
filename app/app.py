@@ -1,6 +1,9 @@
 """
 The application
 """
+import os
+
+import windnd
 
 from .gui import *
 from .utils import *
@@ -9,6 +12,7 @@ from .utils import *
 class Application(GUI):
     def __init__(self, title):
         super().__init__(title)
+        windnd.hook_dropfiles(self, func=self.drag_img, force_unicode=True)
         self.set_ui()
         self.config_ui()
 
@@ -23,12 +27,12 @@ class Application(GUI):
         self.image = None
         self.image_tk = None
 
-    def run(self):
-        try:
-            self.open_img()
-        except Exception as e:
-            print(e)
-        super().run()
+    # def run(self):
+    #     try:
+    #         self.open_img()
+    #     except Exception as e:
+    #         print(e)
+    #     super().run()
 
     def close(self):
         self.destroy()
@@ -53,9 +57,18 @@ class Application(GUI):
         self.left_mouse_up_x = event.x
         self.left_mouse_up_y = event.y
 
+    def drag_img(self, files):
+        for file in files:
+            if os.path.isfile(file):
+                self._open_img(file)
+                break
+
     def open_img(self):
         if (img_path := ask_open_path()) == '':  # if close the dialog window
             return
+        self._open_img(img_path)
+
+    def _open_img(self, img_path):
         try:
             self.image = ImageUtil(img_path)
         except UnidentifiedImageError as e:
@@ -66,7 +79,7 @@ class Application(GUI):
         self.set_canvas_img(self.image_tk)
         self.canvas_img.delete(self.sole_rectangle)
 
-        self.center_ui()
+        # self.center_ui()
 
     def convert(self):
         if self.image is None:
