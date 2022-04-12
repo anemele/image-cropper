@@ -45,6 +45,7 @@ class Application(GUI):
         self.canvas_img.bind('<ButtonRelease-2>', self.right_mouse_up)  # 鼠标右键释放
         self.canvas_img.bind('<B1-Motion>', self.moving_mouse)  # 鼠标左键按下并移动
         self.bind('<Control-o>', lambda event: self.open_img())
+        self.bind('<Double-Button-1>', lambda event: self.open_img())
         self.bind('<Control-s>', lambda event: self.convert())
         self.bind('<Control-q>', lambda event: self.close())
 
@@ -88,7 +89,7 @@ class Application(GUI):
             return
         self.image.crop_img([self.left_mouse_down_x, self.left_mouse_up_x],
                             [self.left_mouse_down_y, self.left_mouse_up_y]
-                            ).save(save_path)
+                            ).save(save_path + self.image.ext)
 
     def moving_mouse(self, event):
         # 鼠标左键按下并移动

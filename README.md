@@ -1,22 +1,21 @@
 # Image Cropper
 
-图片剪裁工具
+简单图片剪裁工具
 
-## 项目结构
+## Run
 
-app包
+双击`start.bat`
 
-+ app.py
-+ constants.py
-+ gui.py
-+ utils.py
+导入图片
 
-test包
-+ test_gui.py
+1. `CTRL+o`，或者双击GUI，浏览文件夹
+2. 直接拖入图片
 
-## 项目依赖
+保存图片
 
-+ Windows 10
-+ Python 3.8.10
-+ tkinter
-+ PIL
+`CTRL+s`，*需要填写后缀名*
+
+退出程序
+
+`CTRL+q`
+

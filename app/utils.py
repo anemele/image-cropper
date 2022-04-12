@@ -24,8 +24,10 @@ class ImageUtil:
         self.image = Image.open(file)
         self.file = file
         if (extn := os.path.splitext(file)[1]) != '':
-            self.extn = [(extn[1:], extn), ('*', '.*')]
+            self.ext = extn
+            self.extn = [(extn[1:].upper(), extn), ('*', '.*')]
         else:
+            self.ext = ''
             self.extn = [('*', '.*')]
 
         self.new_size, self.ratio, self.image_auto_scale = self.auto_scale()
