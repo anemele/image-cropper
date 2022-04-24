@@ -80,7 +80,7 @@ class Application(GUI):
         self.set_canvas_img(self.image_tk)
         self.canvas_img.delete(self.sole_rectangle)
 
-        # self.center_ui()
+        self.center_ui()
 
     def convert(self):
         if self.image is None:
