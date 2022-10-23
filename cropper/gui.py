@@ -5,7 +5,7 @@ The main GUI program
 import tkinter as tk
 from tkinter import filedialog
 
-from .constants import *
+from cropper.constants import *
 
 __all__ = [
     'GUI',

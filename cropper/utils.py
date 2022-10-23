@@ -5,7 +5,7 @@ import os
 
 from PIL import Image, ImageTk, UnidentifiedImageError
 
-from .constants import *
+from cropper.constants import *
 
 __all__ = [
     'ImageUtil',

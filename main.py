@@ -1,4 +1,4 @@
-from app import Application
+from cropper import Application
 
 if __name__ == '__main__':
     app = Application('图片剪裁器')

@@ -3,16 +3,20 @@ The application
 """
 import os
 
-import windnd
+try:
+    import windnd
+except ImportError:
+    windnd = None
 
-from .gui import *
-from .utils import *
+from cropper.gui import *
+from cropper.utils import *
 
 
 class Application(GUI):
     def __init__(self, title):
         super().__init__(title)
-        windnd.hook_dropfiles(self, func=self.drag_img, force_unicode=True)
+        if windnd is not None:
+            windnd.hook_dropfiles(self, func=self.drag_img, force_unicode=True)
         self.set_ui()
         self.config_ui()
 
