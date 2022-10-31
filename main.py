@@ -1,5 +1,6 @@
+#! python3.8
 from cropper import Application
 
 if __name__ == '__main__':
-    app = Application('图片剪裁器')
+    app = Application()
     app.run()

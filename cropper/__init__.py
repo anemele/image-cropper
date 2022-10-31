@@ -1,1 +1,1 @@
-from cropper.app import Application
+from .app import Application

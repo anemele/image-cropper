@@ -3,45 +3,59 @@ The main GUI program
 """
 
 import tkinter as tk
-from tkinter import filedialog
-
-from cropper.constants import *
 
 __all__ = [
-    'GUI',
-    'ask_open_path',
-    'ask_save_path'
+    'GUI'
 ]
 
 
-def ask_open_path():
-    return filedialog.askopenfilename(filetypes=DIALOG_EXT_OPT)
-
-
-def ask_save_path(filetypes):
-    return filedialog.asksaveasfilename(filetypes=filetypes)
-
-
 class GUI(tk.Tk):
-    def __init__(self, title):
+    init_title = 'Image Cropper'
+    init_msg = '双击或者拖入选择图片'
+    delay_ms = 3000
+
+    def __init__(self):
         super().__init__()
-        self.title(title)
-        # self.geometry('%dx%d' % (MAX_IMG_WIDTH, MAX_IMG_HEIGHT))
-        self.resizable(False, False)
 
         self.frame_main = tk.Frame(self)
-        self.canvas_img = tk.Canvas(self.frame_main,
-                                    # width=MAX_IMG_WIDTH, height=MAX_IMG_HEIGHT,
-                                    # bg='pink'
-                                    )
+        self.label_info = tk.Label(self.frame_main, text=self.init_msg)
+        self.canvas_img = tk.Canvas(
+            self.frame_main,
+            # width=MAX_IMG_WIDTH, height=MAX_IMG_HEIGHT,
+            # bg='pink'
+        )
 
-    def set_ui(self):
+        self.config_gui()
+        self.layout_gui()
+
+    def raise_msg(self, msg: str):
+        self.label_info.config(text=msg)
+        self.label_info.after(
+            self.delay_ms,
+            lambda: self.label_info.config(text=self.init_msg)
+        )
+
+    def set_title(self, title: str = None):
+        if title is None:
+            self.title(self.init_title)
+        else:
+            self.title(f'{self.init_title} - {title}')
+
+    def config_gui(self):
+        self.set_title()
+        self.resizable(False, False)
+
+        self.protocol('WM_DELETE_WINDOW', self.exit)
+        self.bind('<Control-q>', lambda event: self.exit())
+
+    def layout_gui(self):
         self.frame_main.pack()
         self.canvas_img.pack()
+        self.label_info.pack()
 
-        self.center_ui()
+        self.center_gui()
 
-    def center_ui(self):
+    def center_gui(self):
         self.update()
         window_width = self.winfo_width()
         window_height = self.winfo_height()
@@ -54,6 +68,9 @@ class GUI(tk.Tk):
 
     def run(self):
         self.mainloop()
+
+    def exit(self):
+        self.destroy()
 
     def set_canvas_img(self, img):
         self.canvas_img.create_image(0, 0, anchor=tk.NW, image=img)

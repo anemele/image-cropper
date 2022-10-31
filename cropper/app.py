@@ -2,23 +2,27 @@
 The application
 """
 import os
+from tkinter import filedialog
 
 try:
     import windnd
 except ImportError:
     windnd = None
 
-from cropper.gui import *
-from cropper.utils import *
+from .constants import DIALOG_EXT_OPT
+from .gui import GUI
+from .utils import ImageUtil
 
 
 class Application(GUI):
-    def __init__(self, title):
-        super().__init__(title)
+
+    def __init__(self):
+        super().__init__()
+
         if windnd is not None:
             windnd.hook_dropfiles(self, func=self.drag_img, force_unicode=True)
-        self.set_ui()
-        self.config_ui()
+
+        self.config_gui()
 
         self.left_mouse_down_x = 0
         self.left_mouse_down_y = 0
@@ -31,18 +35,9 @@ class Application(GUI):
         self.image = None
         self.image_tk = None
 
-    # def run(self):
-    #     try:
-    #         self.open_img()
-    #     except Exception as e:
-    #         print(e)
-    #     super().run()
+    def config_gui(self):
+        super().config_gui()
 
-    def close(self):
-        self.destroy()
-
-    def config_ui(self):
-        self.protocol('WM_DELETE_WINDOW', self.close)
         self.canvas_img.bind('<Button-1>', self.left_mouse_down)  # 鼠标左键按下
         self.canvas_img.bind('<ButtonRelease-1>', self.left_mouse_up)  # 鼠标左键释放
         self.canvas_img.bind('<Button-2>', self.right_mouse_down)  # 鼠标右键按下
@@ -51,7 +46,6 @@ class Application(GUI):
         self.bind('<Control-o>', lambda event: self.open_img())
         self.bind('<Double-Button-1>', lambda event: self.open_img())
         self.bind('<Control-s>', lambda event: self.convert())
-        self.bind('<Control-q>', lambda event: self.close())
 
     def left_mouse_down(self, event):
         # 鼠标左键按下
@@ -69,31 +63,39 @@ class Application(GUI):
                 break
 
     def open_img(self):
-        if (img_path := ask_open_path()) == '':  # if close the dialog window
+        img_path = filedialog.askopenfilename(filetypes=DIALOG_EXT_OPT)
+        if img_path == '':  # if close the dialog window
+            self.raise_msg('Cancel to open.')
             return
         self._open_img(img_path)
 
     def _open_img(self, img_path):
         try:
             self.image = ImageUtil(img_path)
-        except UnidentifiedImageError as e:
+        except Exception as e:
+            self.raise_msg(f'[ERROR] {e}')
             print(e)
             return
+        self.set_title(img_path.replace('/', os.sep))
         self.canvas_img.config(width=self.image.new_size[0], height=self.image.new_size[1])
         self.image_tk = self.image.img_for_tk()  # must be global variable
         self.set_canvas_img(self.image_tk)
         self.canvas_img.delete(self.sole_rectangle)
 
-        self.center_ui()
+        self.center_gui()
 
     def convert(self):
         if self.image is None:
+            self.raise_msg('No image got.')
             return
-        if (save_path := ask_save_path(self.image.extn)) == '':  # if close the dialog window
+        save_path = filedialog.asksaveasfilename(filetypes=self.image.extn)
+        if save_path == '':  # if close the dialog window
+            self.raise_msg('Cancel to save.')
             return
-        self.image.crop_img([self.left_mouse_down_x, self.left_mouse_up_x],
-                            [self.left_mouse_down_y, self.left_mouse_up_y]
-                            ).save(save_path + self.image.ext)
+        self.image.crop_img(
+            [self.left_mouse_down_x, self.left_mouse_up_x],
+            [self.left_mouse_down_y, self.left_mouse_up_y]
+        ).save(save_path + self.image.ext)
 
     def moving_mouse(self, event):
         # 鼠标左键按下并移动
