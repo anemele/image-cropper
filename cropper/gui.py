@@ -53,8 +53,6 @@ class GUI(tk.Tk):
         self.canvas_img.pack()
         self.label_info.pack()
 
-        self.center_gui()
-
     def center_gui(self):
         self.update()
         window_width = self.winfo_width()

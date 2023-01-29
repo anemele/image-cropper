@@ -15,7 +15,6 @@ from .utils import ImageUtil
 
 
 class Application(GUI):
-
     def __init__(self):
         super().__init__()
 
