@@ -1,7 +1,3 @@
-"""
-Constants and configuration
-"""
-
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
 RATIO_SCREEN_W_H = SCREEN_WIDTH / SCREEN_HEIGHT
@@ -11,12 +7,6 @@ SCALE = 0.6
 MAX_IMG_WIDTH = SCALE * SCREEN_WIDTH
 MAX_IMG_HEIGHT = SCALE * SCREEN_HEIGHT
 
-EXTENSION_NAME = (
-    '.*',
-    '.jpg',
-    '.png',
-    '.gif',
-    '.tif',
-)
-EXTENSION_SHOW_NAME = map(lambda x: x[1:].upper(), EXTENSION_NAME)
+EXTENSION_NAME = ('.*', '.jpg', '.png', '.gif', '.tif')
+EXTENSION_SHOW_NAME = tuple(x[1:].upper() for x in EXTENSION_NAME)
 DIALOG_EXT_OPT = list(zip(EXTENSION_SHOW_NAME, EXTENSION_NAME))

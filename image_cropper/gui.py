@@ -1,12 +1,4 @@
-"""
-The main GUI program
-"""
-
 import tkinter as tk
-
-__all__ = [
-    'GUI'
-]
 
 
 class GUI(tk.Tk):
@@ -31,11 +23,10 @@ class GUI(tk.Tk):
     def raise_msg(self, msg: str):
         self.label_info.config(text=msg)
         self.label_info.after(
-            self.delay_ms,
-            lambda: self.label_info.config(text=self.init_msg)
+            self.delay_ms, lambda: self.label_info.config(text=self.init_msg)
         )
 
-    def set_title(self, title: str = None):
+    def set_title(self, title: str | None = None):
         if title is None:
             self.title(self.init_title)
         else:
@@ -59,10 +50,10 @@ class GUI(tk.Tk):
         window_height = self.winfo_height()
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
-        self.geometry('+%d+%d' % (
-            (screen_width - window_width) >> 1,
-            (screen_height - window_height) >> 1
-        ))
+        self.geometry(
+            '+%d+%d'
+            % ((screen_width - window_width) >> 1, (screen_height - window_height) >> 1)
+        )
 
     def run(self):
         self.mainloop()
